@@ -4,6 +4,12 @@
 
 This is a Javascript API client wrapper for [Vainglory](http://vainglorygame.com). If you run into problems or find bugs, [file an issue](https://github.com/seripap/vainglory/issues).
 
+## Requirements
+
+```
+Node 6>
+```
+
 ## Installation
 
 ```
@@ -27,7 +33,7 @@ Base options can be modified by passing an object during initalization.
 __Properties__
 - `host` [*String*] - HTTP Url to call
 - `title` [*String*] - X-TITLE-ID modifier
-- `region` [*String*] - Region of which game data to request (`na`, `eu`, `sa`, `ea`, `sg`) [Reference](https://developer.vainglorygame.com/docs#regions)
+- `region` [*String*] - Region of which game data to request (`na`, `eu`, `sa`, `ea`, `sg`, `cn`) [Reference](https://developer.vainglorygame.com/docs#regions)
 
 ```javascript
 import Vainglory from 'vainglory';

@@ -42,7 +42,7 @@ var _roster2 = _interopRequireDefault(_roster);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var map = {
+const map = {
   asset: _asset2.default,
   players: _players2.default,
   player: _player2.default,
@@ -53,7 +53,7 @@ var map = {
 };
 
 function getModel(entityType) {
-  var model = map[entityType];
+  const model = map[entityType];
   if (!model) {
     throw new Error('Could not figure out class mapping');
   }
@@ -61,37 +61,35 @@ function getModel(entityType) {
   return model;
 }
 
-exports.default = function (entity, data) {
+exports.default = (entity, data) => {
 
   if (data === null) {
     return data;
   }
 
-  var parentData = data.data;
-  var includedData = data.included;
-  var BaseModel = getModel(entity);
-  var dataModel = new BaseModel(parentData);
+  const parentData = data.data;
+  const includedData = data.included;
+  const BaseModel = getModel(entity);
+  const dataModel = new BaseModel(parentData);
 
   function checkForRelations(model, parent) {
-    var clone = model;
+    const clone = model;
     if (!model.relationships || !parent) {
       return clone;
     }
 
     if (model.relationships && model.relationships.length > 0) {
-      model.relationships.forEach(function (item) {
+      model.relationships.forEach(item => {
         if ((0, _isArray2.default)(parent)) {
-          clone[item.type] = parent.map(function (child) {
-            var ChildModel = getModel(child.type);
-            var childModel = new ChildModel(child);
+          clone[item.type] = parent.map(child => {
+            const ChildModel = getModel(child.type);
+            const childModel = new ChildModel(child);
             return checkForRelations(childModel, child);
           });
         } else {
-          var relations = parent.relationships[item.type] ? parent.relationships[item.type].data : false;
+          const relations = parent.relationships[item.type] ? parent.relationships[item.type].data : false;
           if (relations) {
-            clone[item.type] = (0, _isArray2.default)(relations) ? relations.map(function (relation) {
-              return filterRelations(relation);
-            }) : filterRelations(relations);
+            clone[item.type] = (0, _isArray2.default)(relations) ? relations.map(relation => filterRelations(relation)) : filterRelations(relations);
           }
         }
       });
@@ -101,11 +99,9 @@ exports.default = function (entity, data) {
 
   // Filters models so they are formatted correctly.
   function filterRelations(relation) {
-    var mappedData = includedData.find(function (inc) {
-      return inc.id === relation.id;
-    });
-    var RelationModel = getModel(relation.type);
-    var modeledData = new RelationModel(mappedData);
+    const mappedData = includedData.find(inc => inc.id === relation.id);
+    const RelationModel = getModel(relation.type);
+    const modeledData = new RelationModel(mappedData);
 
     return checkForRelations(modeledData, modeledData.data);
   }

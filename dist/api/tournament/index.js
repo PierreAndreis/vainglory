@@ -30,21 +30,19 @@ var _players2 = _interopRequireDefault(_players);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var REGION_PREFIX = 'tournament';
+const REGION_PREFIX = 'tournament';
 
-exports.default = function (http) {
+exports.default = http => {
 
-  function region() {
-    var REQUESTED_REGION = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-    var REGION_TO_REQUEST = null;
+  function region(REQUESTED_REGION = false) {
+    let REGION_TO_REQUEST = null;
     if (!REQUESTED_REGION) {
       REGION_TO_REQUEST = http.region;
     } else {
       REGION_TO_REQUEST = REQUESTED_REGION;
     }
 
-    http.tempRegion = REGION_PREFIX + '-' + REGION_TO_REQUEST;
+    http.tempRegion = `${REGION_PREFIX}-${REGION_TO_REQUEST}`;
     return {
       matches: (0, _matches2.default)(http),
       players: (0, _players2.default)(http)
@@ -52,6 +50,6 @@ exports.default = function (http) {
   }
 
   return {
-    region: region
+    region
   };
 };

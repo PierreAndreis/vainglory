@@ -3,35 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _nodeFetch = require('node-fetch');
 
@@ -43,89 +14,52 @@ var _2 = _interopRequireDefault(_);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Asset = function (_BaseModel) {
-  (0, _inherits3.default)(Asset, _BaseModel);
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-  function Asset(data) {
-    (0, _classCallCheck3.default)(this, Asset);
-    return (0, _possibleConstructorReturn3.default)(this, (Asset.__proto__ || (0, _getPrototypeOf2.default)(Asset)).call(this, data));
+class Asset extends _2.default {
+
+  constructor(data) {
+    super(data);
   }
 
-  (0, _createClass3.default)(Asset, [{
-    key: 'resolve',
-    value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var response, body;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return (0, _nodeFetch2.default)(this.URL);
+  get URL() {
+    return this.data.attributes.URL;
+  }
 
-              case 3:
-                response = _context.sent;
-                _context.next = 6;
-                return response.json();
+  get contentType() {
+    return this.data.attributes.contentType;
+  }
 
-              case 6:
-                body = _context.sent;
-                return _context.abrupt('return', body);
+  get createdAt() {
+    return this.data.attributes.createdAt;
+  }
 
-              case 10:
-                _context.prev = 10;
-                _context.t0 = _context['catch'](0);
+  get description() {
+    return this.data.attributes.description;
+  }
 
-                console.log(_context.t0);
-                return _context.abrupt('return', false);
+  get filename() {
+    return this.data.attributes.filename;
+  }
 
-              case 14:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this, [[0, 10]]);
-      }));
+  get name() {
+    return this.data.attributes.name;
+  }
 
-      function resolve() {
-        return _ref.apply(this, arguments);
+  resolve() {
+    var _this = this;
+
+    return _asyncToGenerator(function* () {
+      try {
+        const response = yield (0, _nodeFetch2.default)(_this.URL);
+        const body = yield response.json();
+        return body;
+      } catch (e) {
+        console.log(e);
+        return false;
       }
+    })();
+  }
 
-      return resolve;
-    }()
-  }, {
-    key: 'URL',
-    get: function get() {
-      return this.data.attributes.URL;
-    }
-  }, {
-    key: 'contentType',
-    get: function get() {
-      return this.data.attributes.contentType;
-    }
-  }, {
-    key: 'createdAt',
-    get: function get() {
-      return this.data.attributes.createdAt;
-    }
-  }, {
-    key: 'description',
-    get: function get() {
-      return this.data.attributes.description;
-    }
-  }, {
-    key: 'filename',
-    get: function get() {
-      return this.data.attributes.filename;
-    }
-  }, {
-    key: 'name',
-    get: function get() {
-      return this.data.attributes.name;
-    }
-  }]);
-  return Asset;
-}(_2.default);
-
+}
 exports.default = Asset;

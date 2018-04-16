@@ -3,35 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
-
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
-var _getIterator2 = require('babel-runtime/core-js/get-iterator');
-
-var _getIterator3 = _interopRequireDefault(_getIterator2);
-
-var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _ = require('./');
 
@@ -51,133 +22,83 @@ var _karma2 = _interopRequireDefault(_karma);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Participant = function (_BaseModel) {
-  (0, _inherits3.default)(Participant, _BaseModel);
+class Participant extends _2.default {
 
-  function Participant(data) {
-    (0, _classCallCheck3.default)(this, Participant);
-
-    var _this = (0, _possibleConstructorReturn3.default)(this, (Participant.__proto__ || (0, _getPrototypeOf2.default)(Participant)).call(this, data));
-
-    _this.relationships = [{
+  constructor(data) {
+    super(data);
+    this.relationships = [{
       type: 'player'
     }];
-    return _this;
   }
 
-  (0, _createClass3.default)(Participant, [{
-    key: 'replaceItem',
-    value: function replaceItem(key, stats) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        var _loop = function _loop() {
-          var property = _step.value;
-
-          var normalizedName = _items2.default.find(function (item) {
-            return item.serverName === property;
-          });
-          if (normalizedName) {
-            stats[key][normalizedName.name] = stats[key][property];
-            delete stats[key][property];
-          }
-        };
-
-        for (var _iterator = (0, _getIterator3.default)((0, _keys2.default)(stats[key])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          _loop();
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+  replaceItem(key, stats) {
+    for (const property of Object.keys(stats[key])) {
+      const normalizedName = _items2.default.find(item => item.serverName === property);
+      if (normalizedName) {
+        stats[key][normalizedName.name] = stats[key][property];
+        delete stats[key][property];
       }
-
-      return stats[key];
     }
-  }, {
-    key: 'replaceItemArray',
-    value: function replaceItemArray(key, stats) {
-      stats[key].forEach(function (element, index) {
-        var normalizedName = _items2.default.find(function (item) {
-          return item.serverName === element;
-        });
-        if (normalizedName) {
-          stats[key][index] = normalizedName.name;
-        }
-      });
 
-      return stats.items;
-    }
-  }, {
-    key: '_actor',
-    get: function get() {
-      return this.raw.attributes.actor;
-    }
-  }, {
-    key: 'actor',
-    get: function get() {
-      var actor = this.raw.attributes.actor;
+    return stats[key];
+  }
 
-
-      var badServerNames = [{ token: '*Hero009*', name: 'Krul' }, { token: '*Hero010*', name: 'Skaarf' }, { token: '*Sayoc*', name: 'Taka' }, { token: '*Hero016*', name: 'Rona' }];
-
-      var match = badServerNames.filter(function (item) {
-        return item.token === actor;
-      });
-
-      if (match.length > 0) {
-        return match[0].name;
+  replaceItemArray(key, stats) {
+    stats[key].forEach((element, index) => {
+      const normalizedName = _items2.default.find(item => item.serverName === element);
+      if (normalizedName) {
+        stats[key][index] = normalizedName.name;
       }
+    });
 
-      return actor.replace(/\*/g, '');
+    return stats.items;
+  }
+
+  get _actor() {
+    return this.raw.attributes.actor;
+  }
+
+  get actor() {
+    const { actor } = this.raw.attributes;
+
+    const badServerNames = [{ token: '*Hero009*', name: 'Krul' }, { token: '*Hero010*', name: 'Skaarf' }, { token: '*Sayoc*', name: 'Taka' }, { token: '*Hero016*', name: 'Rona' }];
+
+    const match = badServerNames.filter(item => item.token === actor);
+
+    if (match.length > 0) {
+      return match[0].name;
     }
-  }, {
-    key: '_stats',
-    get: function get() {
-      return this.raw.attributes.stats;
-    }
-  }, {
-    key: 'stats',
-    get: function get() {
-      var stats = this.raw.attributes.stats;
-      stats.itemGrants = this.replaceItem('itemGrants', stats);
-      stats.itemUses = this.replaceItem('itemUses', stats);
-      stats.items = this.replaceItemArray('items', stats);
 
-      var skillTier = _skillTiers2.default.find(function (tier) {
-        return tier.serverName === stats.skillTier;
-      });
-      var karmaLevel = _karma2.default.find(function (k) {
-        return k.serverName === stats.karmaLevel;
-      });
+    return actor.replace(/\*/g, '');
+  }
 
-      stats.skillTier = skillTier ? skillTier.name : stats.skillTier;
-      stats.karmaLevel = karmaLevel ? karmaLevel.name : stats.karmaLevel;
+  get _stats() {
+    return this.raw.attributes.stats;
+  }
 
-      return stats;
-    }
-  }, {
-    key: 'player',
-    set: function set(player) {
-      this.participantPlayer = player;
-      return this;
-    },
-    get: function get() {
-      return this.participantPlayer;
-    }
-  }]);
-  return Participant;
-}(_2.default);
+  get stats() {
+    const stats = this.raw.attributes.stats;
+    stats.itemGrants = this.replaceItem('itemGrants', stats);
+    stats.itemUses = this.replaceItem('itemUses', stats);
+    stats.items = this.replaceItemArray('items', stats);
 
+    const skillTier = _skillTiers2.default.find(tier => tier.serverName === stats.skillTier);
+    const karmaLevel = _karma2.default.find(k => k.serverName === stats.karmaLevel);
+
+    stats.skillTier = skillTier ? skillTier.name : stats.skillTier;
+    stats.karmaLevel = karmaLevel ? karmaLevel.name : stats.karmaLevel;
+
+    return stats;
+  }
+
+  set player(player) {
+    this.participantPlayer = player;
+    return this;
+  }
+
+  get player() {
+    return this.participantPlayer;
+  }
+
+}
 exports.default = Participant;
