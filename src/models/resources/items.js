@@ -873,5 +873,5 @@ export default [
   {
     "serverName": "Item_CapacitorPlate",
     "name": "Capacitor Plate"
-  },
+  }
 ]
